@@ -10,7 +10,7 @@ pipeline {
         gitRepoURL = "${params.GIT_URL}"
         gitBranchName = "${params.BRANCH_NAME}"
         repoName = "${params.repository}"
-        dockerImage = "891543987898.dkr.ecr.ap-south-1.amazonaws.com/${repoName}"
+        dockerImage = "851725195109.dkr.ecr.us-east-1.amazonaws.com/${repoName}"
         gitCommit = "${GIT_COMMIT[0..6]}"
         dockerTag = "${params.BRANCH_NAME}-${gitCommit}"
     }
@@ -32,7 +32,7 @@ pipeline {
 
         stage('Docker Push') {
             steps {
-                dockerECRImagePush('$dockerImage', '$dockerTag', '$repoName', 'awsCred', 'ap-south-1')
+                dockerECRImagePush('$dockerImage', '$dockerTag', '$repoName', 'awsCred', 'us-east-1')
             }
         }
 
@@ -41,18 +41,8 @@ pipeline {
                 branch 'development'
             }
             steps {
-                kubernetesEKSHelmDeploy('$dockerImage', '$dockerTag', '$repoName', 'awsCred', 'ap-south-1', 'opq', 'dev')
+                kubernetesEKSHelmDeploy('$dockerImage', '$dockerTag', '$repoName', 'awsCred', 'us-east-1', 'Master_jenk', 'dev')
             }
         }
-
-        stage('Kubernetes Deploy - UAT') {        
-            when {
-                branch 'master'
-            }
-            steps {
-                kubernetesEKSHelmDeploy('$dockerImage', '$dockerTag', '$repoName', 'awsCred', 'ap-south-1', 'opq', 'uat')
-            }
-        }
-
     }
 }
