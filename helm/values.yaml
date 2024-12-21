@@ -6,8 +6,9 @@ image:
   tag: 1
   containerPort: 3000
 service:
-  type: ClusterIP
+  type: nodePort
   clusterIPPort: 3000
+  nodePort: 31568
 resource:
   cpu:
     requests: 0.1
