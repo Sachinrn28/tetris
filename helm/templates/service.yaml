@@ -4,9 +4,10 @@ metadata:
   name: {{ .Values.deployment.name }}-svc
   namespace: {{ .Values.namespace }}
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
   - port: {{ .Values.service.clusterIPPort }}
     targetPort: {{ .Values.image.containerPort }}
+    nodePort: {{ .Values.service.nodePort }}
   selector:
     app: {{ .Values.deployment.name }}
